@@ -1,4 +1,4 @@
-# Heart-Disease-Prediction-using-Machine-Learning
+# CARDIOCARE - Heart-Disease-Prediction-using-Machine-Learning
 CARDIOCARE named heart disease prediction app 
 Author- Diya Rastogi
 Despite the continuous advancements in medical technology, heart disease persists as a leading cause of death worldwide. Many individuals remain unaware of their risk factors or lack access to timely screenings. Additionally, there is a shortage of personalized tools available to accurately assess individual risk, resulting in a gap in proactive heart health management.
