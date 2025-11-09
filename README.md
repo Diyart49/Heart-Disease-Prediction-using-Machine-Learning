@@ -1,4 +1,11 @@
 # CARDIOCARE - Heart-Disease-Prediction-using-Machine-Learning
+
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python)
+![Flask](https://img.shields.io/badge/Flask-Web_Framework-green?logo=flask)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-Machine_Learning-orange?logo=scikit-learn)
+![License](https://img.shields.io/badge/License-MIT-lightgrey)
+
+
 CARDIOCARE named heart disease prediction app 
 Author- Diya Rastogi
 Despite the continuous advancements in medical technology, heart disease persists as a leading cause of death worldwide. Many individuals remain unaware of their risk factors or lack access to timely screenings. Additionally, there is a shortage of personalized tools available to accurately assess individual risk, resulting in a gap in proactive heart health management.
