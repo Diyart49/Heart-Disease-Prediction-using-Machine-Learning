@@ -6,6 +6,43 @@ To address this issue, CARDIOCARE offers a user-friendly heart disease predictio
 
 I've used a variety of Machine Learning algorithms, implemented in Python, to predict the presence of heart disease in a patient. This is a classification problem, with input features as a variety of parameters, and the target variable as a binary variable, predicting whether heart disease is present or not.
 
+## 🧩 Features
+- Interactive web interface for data input  
+- ML model trained on a healthcare dataset  
+- Real-time prediction results  
+- End-to-end integration of model with Flask  
+- Clean, modular, and reproducible code  
+
+---
+
+## ⚙️ Tech Stack
+**Languages & Libraries:** Python, NumPy, Pandas, scikit-learn, Flask  
+**Frontend:** HTML, CSS  
+**Concepts Used:** Feature Scaling, Train-Test Split, Model Evaluation  
+
+---
+
+## 📈 Model Overview
+- Trained multiple models (Logistic Regression, Random Forest, XGBoost)  
+- Selected best-performing model based on **ROC-AUC** and **F1-Score**  
+- Final model deployed in Flask web app  
+
+---
+
+## 🚀 How to Run Locally
+
+```bash
+# Clone this repository
+git clone https://github.com/diyart49/Heart-Disease-Prediction-ML-App.git
+
+# Navigate into the project directory
+cd Heart-Disease-Prediction-ML-App
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the app
+python app.py
 
 
 Machine Learning algorithms used:
