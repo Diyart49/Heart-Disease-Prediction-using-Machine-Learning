@@ -45,17 +45,6 @@ pip install -r requirements.txt
 python app.py
 
 
-Machine Learning algorithms used:
-
-1.Logistic Regression (Scikit-learn)
-
-2.Naive Bayes (Scikit-learn)
-
-3.Support Vector Machine (Linear) (Scikit-learn)
-
-4.K-Nearest Neighbours (Scikit-learn)
-
-5.Decision Tree (Scikit-learn)
 
 
 
