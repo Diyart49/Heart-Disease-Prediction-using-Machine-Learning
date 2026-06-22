@@ -28,11 +28,9 @@ def retrain_model():
     X_train, X_test, y_train, y_test = train_test_split(
         features, target, test_size=0.2, random_state=0
     )
-
     model = GradientBoostingClassifier(random_state=1)
     model.fit(X_train, y_train)
 
-    # Save freshly trained model
     with open('model.pkl', 'wb') as f:
         pickle.dump(model, f)
 
@@ -51,7 +49,6 @@ def predict():
     try:
         data = request.get_json()
 
-        # Features in exact training order
         features = [
             float(data['age']),
             float(data['sex']),
@@ -71,11 +68,14 @@ def predict():
         input_array = np.array([features])
         prediction = model.predict(input_array)[0]
         probability = model.predict_proba(input_array)[0]
+        classes = model.classes_.tolist()
 
         # Target: 1 = no disease, 2 = disease
         has_disease = int(prediction) == 2
-        # probability index 1 corresponds to label "2" (disease class)
-        risk_score = round(float(probability[1]) * 100, 1)
+
+        # Get probability for class "2" (disease)
+        disease_idx = classes.index(2)
+        risk_score = round(float(probability[disease_idx]) * 100, 1)
 
         return jsonify({
             'prediction': int(prediction),
