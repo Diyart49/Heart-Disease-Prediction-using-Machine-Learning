@@ -90,3 +90,9 @@ def predict():
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
+import os
+
+print("Current directory:", os.getcwd())
+print("Files:", os.listdir("."))
+print("Templates exists:", os.path.exists("templates"))
+print("Templates contents:", os.listdir("templates") if os.path.exists("templates") else "missing")
