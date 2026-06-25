@@ -1,1 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CardioCare — Heart Disease Risk Assessment</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --border:    #21262d;
+      --muted:     #8b949e;
+      --text:      #e6edf3;
+      --accent:    #e05c5c;
+      --accent-lo: rgba(224,92,92,0.12);
+      --safe:      #3fb950;
+      --safe-lo:   rgba(63,185,80,0.12);
+      --warn:      #d29922;
+      --warn-lo:   rgba(210,153,34,0.12);
+      --radius:    10px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 18px 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-pulse {
+      width: 32px; height: 32px;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .logo-pulse svg { width: 100%; height: 100%; }
+    header h1 {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+    header span {
+      font-weight: 300;
+      color: var(--muted);
+    }
+    .badge {
+      margin-left: auto;
+      font-size: 11px;
+      font-family: 'DM Mono', monospace;
+      background: var(--accent-lo);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    /* ── Layout ── */
+    main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .hero h2 {
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .hero p {
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto;
+      font-size: 14px;
+    }
+
+    /* ── Form card ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .card-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      font-family: 'DM Mono', monospace;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-header::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: inline-block;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    .field {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+    }
+    .field:nth-child(even) { border-right: none; }
+    .field:nth-last-child(-n+2) { border-bottom: none; }
+
+    label {
+      display: block;
+      font-size: 11px;
+      font-family: 'DM Mono', monospace;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 8px;
+    }
+    label .hint {
+      font-size: 10px;
+      color: var(--border);
+      text-transform: none;
+      letter-spacing: 0;
+      font-family: 'DM Sans', sans-serif;
+      margin-left: 6px;
+    }
+
+    input[type="number"],
+    select {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-size: 14px;
+      padding: 9px 12px;
+      outline: none;
+      transition: border-color 0.15s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    input[type="number"]:focus,
+    select:focus {
+      border-color: var(--accent);
+    }
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238b949e'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 32px;
+      cursor: pointer;
+    }
+    select option { background: var(--surface); }
+
+    /* ── Submit ── */
+    .submit-area {
+      padding: 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    button[type="submit"] {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 12px 32px;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    button[type="submit"]:hover { opacity: 0.9; }
+    button[type="submit"]:active { transform: scale(0.98); }
+    button[type="submit"]:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .disclaimer {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ── Result ── */
+    #result {
+      margin-top: 28px;
+      display: none;
+    }
+    .result-card {
+      border-radius: var(--radius);
+      border: 1px solid;
+      overflow: hidden;
+    }
+    .result-card.safe   { border-color: var(--safe);   background: var(--safe-lo); }
+    .result-card.warn   { border-color: var(--warn);   background: var(--warn-lo); }
+    .result-card.danger { border-color: var(--accent); background: var(--accent-lo); }
+
+    .result-top {
+      padding: 24px 28px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .result-icon {
+      font-size: 36px;
+      line-height: 1;
+    }
+    .result-label {
+      font-size: 11px;
+      font-family: 'DM Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .result-title {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+    .result-card.safe   .result-title { color: var(--safe); }
+    .result-card.warn   .result-title { color: var(--warn); }
+    .result-card.danger .result-title { color: var(--accent); }
+
+    /* Risk bar */
+    .risk-bar-wrap {
+      padding: 0 28px 24px;
+    }
+    .risk-bar-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      font-family: 'DM Mono', monospace;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .risk-bar-track {
+      height: 6px;
+      border-radius: 3px;
+      background: var(--border);
+      overflow: hidden;
+    }
+    .risk-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+    }
+    .result-card.safe   .risk-bar-fill { background: var(--safe); }
+    .result-card.warn   .risk-bar-fill { background: var(--warn); }
+    .result-card.danger .risk-bar-fill { background: var(--accent); }
+
+    .result-note {
+      padding: 16px 28px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* ── Spinner ── */
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .field { border-right: none !important; }
+      .field:last-child { border-bottom: none; }
+      .field:nth-last-child(-n+2) { border-bottom: 1px solid var(--border); }
+      .field:last-child { border-bottom: none !important; }
+      header { padding: 14px 18px; }
+      main { padding: 28px 16px 60px; }
+      .submit-area { flex-direction: column; align-items: flex-start; }
+      .hero h2 { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-pulse">
+    <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16 28s-12-7.5-12-15a7 7 0 0 1 12-4.9A7 7 0 0 1 28 13c0 7.5-12 15-12 15z" fill="#e05c5c" opacity="0.2"/>
+      <path d="M16 28s-12-7.5-12-15a7 7 0 0 1 12-4.9A7 7 0 0 1 28 13c0 7.5-12 15-12 15z" stroke="#e05c5c" stroke-width="1.5" fill="none"/>
+      <polyline points="6,16 9,13 12,19 15,11 18,17 21,14 26,14" stroke="#e05c5c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+  </div>
+  <h1>Cardio<span>Care</span></h1>
+  <div class="badge">ML · GradientBoosting</div>
+</header>
+
+<main>
+  <div class="hero">
+    <h2>Heart Disease Risk Assessment</h2>
+    <p>Enter your clinical parameters below to receive an AI-generated risk prediction. Not a substitute for medical advice.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-header">Patient Parameters</div>
+    <form id="predictForm">
+      <div class="form-grid">
+
+        <div class="field">
+          <label>Age <span class="hint">years</span></label>
+          <input type="number" name="age" min="1" max="120" placeholder="e.g. 54" required/>
+        </div>
+
+        <div class="field">
+          <label>Sex</label>
+          <select name="sex" required>
+            <option value="" disabled selected>Select</option>
+            <option value="1">Male</option>
+            <option value="0">Female</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Chest Pain Type <span class="hint">cp</span></label>
+          <select name="cp" required>
+            <option value="" disabled selected>Select</option>
+            <option value="1">1 — Typical angina</option>
+            <option value="2">2 — Atypical angina</option>
+            <option value="3">3 — Non-anginal pain</option>
+            <option value="4">4 — Asymptomatic</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Resting BP <span class="hint">mmHg</span></label>
+          <input type="number" name="trestbps" min="50" max="250" placeholder="e.g. 130" required/>
+        </div>
+
+        <div class="field">
+          <label>Cholesterol <span class="hint">mg/dl</span></label>
+          <input type="number" name="chol" min="100" max="600" placeholder="e.g. 250" required/>
+        </div>
+
+        <div class="field">
+          <label>Fasting Blood Sugar <span class="hint">&gt;120 mg/dl</span></label>
+          <select name="fbs" required>
+            <option value="" disabled selected>Select</option>
+            <option value="1">Yes (&gt;120 mg/dl)</option>
+            <option value="0">No (≤120 mg/dl)</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Resting ECG <span class="hint">restecg</span></label>
+          <select name="restecg" required>
+            <option value="" disabled selected>Select</option>
+            <option value="0">0 — Normal</option>
+            <option value="1">1 — ST-T abnormality</option>
+            <option value="2">2 — LV hypertrophy</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Max Heart Rate <span class="hint">thalach, bpm</span></label>
+          <input type="number" name="thalach" min="50" max="250" placeholder="e.g. 150" required/>
+        </div>
+
+        <div class="field">
+          <label>Exercise-induced Angina</label>
+          <select name="exang" required>
+            <option value="" disabled selected>Select</option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>ST Depression <span class="hint">oldpeak</span></label>
+          <input type="number" name="oldpeak" min="0" max="10" step="0.1" placeholder="e.g. 1.5" required/>
+        </div>
+
+        <div class="field">
+          <label>ST Slope <span class="hint">slope</span></label>
+          <select name="slope" required>
+            <option value="" disabled selected>Select</option>
+            <option value="1">1 — Upsloping</option>
+            <option value="2">2 — Flat</option>
+            <option value="3">3 — Downsloping</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Fluoroscopy Vessels <span class="hint">ca · 0–3</span></label>
+          <select name="ca" required>
+            <option value="" disabled selected>Select</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Thalassemia <span class="hint">thal</span></label>
+          <select name="thal" required>
+            <option value="" disabled selected>Select</option>
+            <option value="3">3 — Normal</option>
+            <option value="6">6 — Fixed defect</option>
+            <option value="7">7 — Reversible defect</option>
+          </select>
+        </div>
+
+        <!-- empty cell to balance grid -->
+        <div class="field" style="border-bottom:none; background: transparent;"></div>
+
+      </div>
+
+      <div class="submit-area">
+        <button type="submit" id="submitBtn">
+          <span id="btnText">Assess Risk</span>
+          <div class="spinner" id="spinner"></div>
+        </button>
+        <p class="disclaimer">This tool uses a machine learning model trained on the Cleveland Heart Disease dataset.<br>Results are for informational purposes only.</p>
+      </div>
+    </form>
+  </div>
+
+  <!-- Result -->
+  <div id="result">
+    <div class="result-card" id="resultCard">
+      <div class="result-top">
+        <div class="result-icon" id="resultIcon"></div>
+        <div>
+          <div class="result-label">Prediction Result</div>
+          <div class="result-title" id="resultTitle"></div>
+        </div>
+        <div style="margin-left:auto; text-align:right;">
+          <div class="result-label">Risk Score</div>
+          <div id="resultScore" style="font-size:28px; font-family:'DM Mono',monospace; font-weight:500;"></div>
+        </div>
+      </div>
+      <div class="risk-bar-wrap">
+        <div class="risk-bar-labels">
+          <span>Low Risk</span>
+          <span>High Risk</span>
+        </div>
+        <div class="risk-bar-track">
+          <div class="risk-bar-fill" id="riskBarFill" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="result-note" id="resultNote"></div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  const form = document.getElementById('predictForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const spinner = document.getElementById('spinner');
+  const btnText = document.getElementById('btnText');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // Collect form data
+    const fd = new FormData(form);
+    const payload = {};
+    for (const [k, v] of fd.entries()) payload[k] = v;
+
+    // Loading state
+    submitBtn.disabled = true;
+    btnText.textContent = 'Analysing…';
+    spinner.style.display = 'block';
+
+    try {
+      const res = await fetch('/predict', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+
+      if (data.status === 'error') throw new Error(data.message);
+
+      showResult(data);
+    } catch (err) {
+      alert('Prediction failed: ' + err.message);
+    } finally {
+      submitBtn.disabled = false;
+      btnText.textContent = 'Assess Risk';
+      spinner.style.display = 'none';
+    }
+  });
+
+  function showResult(data) {
+    const card    = document.getElementById('resultCard');
+    const icon    = document.getElementById('resultIcon');
+    const title   = document.getElementById('resultTitle');
+    const score   = document.getElementById('resultScore');
+    const fill    = document.getElementById('riskBarFill');
+    const note    = document.getElementById('resultNote');
+    const wrapper = document.getElementById('result');
+
+    const risk = data.risk_score;
+
+    let cls, iconChar, titleText, noteText;
+
+    if (!data.has_disease && risk < 40) {
+      cls = 'safe';
+      iconChar = '💚';
+      titleText = 'Low Risk Detected';
+      noteText = 'The model predicts a low probability of heart disease. Continue regular health screenings and maintain a heart-healthy lifestyle.';
+    } else if (risk >= 40 && risk < 65) {
+      cls = 'warn';
+      iconChar = '⚠️';
+      titleText = 'Moderate Risk Detected';
+      noteText = 'The model indicates a moderate risk level. Consult a cardiologist for a comprehensive evaluation and consider lifestyle modifications.';
+    } else {
+      cls = 'danger';
+      iconChar = '🚨';
+      titleText = 'Elevated Risk Detected';
+      noteText = 'The model indicates elevated risk of heart disease. Please seek medical advice promptly for further diagnostic evaluation.';
+    }
+
+    card.className = 'result-card ' + cls;
+    icon.textContent = iconChar;
+    title.textContent = titleText;
+    score.textContent = risk + '%';
+    note.textContent = noteText;
+
+    wrapper.style.display = 'block';
+    wrapper.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    // Animate bar after short delay
+    setTimeout(() => { fill.style.width = risk + '%'; }, 100);
+  }
+</script>
+</body>
+</html>
