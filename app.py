@@ -3,7 +3,8 @@ import pickle
 import numpy as np
 import os
 
-app = Flask(__name__)
+# app = Flask(__name__)
+app = Flask(__name__, template_folder='.')
 
 def load_or_train_model():
     """Try loading saved model; if version mismatch, retrain from data.csv."""
